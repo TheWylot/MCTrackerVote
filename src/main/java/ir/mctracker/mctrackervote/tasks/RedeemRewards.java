@@ -4,7 +4,7 @@ import ir.mctracker.mctrackervote.api.PlayerVoteEvent;
 import ir.mctracker.mctrackervote.api.PlayerVoteRewardReceiveEvent;
 import ir.mctracker.mctrackervote.config.Config;
 import ir.mctracker.mctrackervote.database.models.Vote;
-import ir.mctracker.mctrackervote.utilities.Util;
+import ir.mctracker.mctrackervote.utilities.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -30,22 +30,22 @@ public class RedeemRewards extends BukkitRunnable {
 
                     if (action.startsWith("[message]")) {
                         player.sendMessage(
-                                Util.colorize(
+                                Utils.colorize(
                                         action.replace("[message]", "").trim()
                                 )
                         );
                     } else if (action.startsWith("[console]")) {
                         Bukkit.dispatchCommand(
                                 Bukkit.getConsoleSender(),
-                                Util.colorize(action.replace("[console]", "").trim())
+                                Utils.colorize(action.replace("[console]", "").trim())
                         );
                     } else if (action.startsWith("[player]")) {
                         player.performCommand(
-                                Util.colorize(action .replace("[player]", "").trim())
+                                Utils.colorize(action .replace("[player]", "").trim())
                         );
                     } else if (action.startsWith("[broadcast]")) {
                         Bukkit.getServer().broadcastMessage(
-                                Util.colorize(
+                                Utils.colorize(
                                         action.replace("[broadcast]", "").trim()
                                 )
                         );

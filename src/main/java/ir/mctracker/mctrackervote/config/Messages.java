@@ -2,7 +2,7 @@ package ir.mctracker.mctrackervote.config;
 
 import ir.jeykey.megacore.MegaPlugin;
 import ir.jeykey.megacore.config.Configurable;
-import ir.mctracker.mctrackervote.utilities.Util;
+import ir.mctracker.mctrackervote.utilities.Utils;
 
 import java.util.List;
 import java.util.Objects;
@@ -33,7 +33,7 @@ public class Messages extends Configurable {
     }
 
     private String format(String text) {
-        return Util.colorize(
+        return Utils.colorize(
                 text.replace("{prefix}", PREFIX != null ? PREFIX : "")
         );
     }

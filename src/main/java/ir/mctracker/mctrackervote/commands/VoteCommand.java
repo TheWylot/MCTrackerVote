@@ -3,7 +3,7 @@ package ir.mctracker.mctrackervote.commands;
 import ir.mctracker.mctrackervote.api.PlayerPreVoteEvent;
 import ir.mctracker.mctrackervote.config.Config;
 import ir.mctracker.mctrackervote.config.Messages;
-import ir.mctracker.mctrackervote.utilities.Util;
+import ir.mctracker.mctrackervote.utilities.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -31,7 +31,7 @@ public class VoteCommand implements CommandExecutor {
         if (args.length == 0) {
             if (sender.hasPermission(VOTE_PERMISSION) || !Config.VOTE_NEEDS_PERMISSION) {
                 for (String s : Messages.VOTE_MESSAGES) {
-                    sender.sendMessage(Util.colorize(s.replace("{player}", p.getName()).replace("{vote_url}", Config.VOTE_URL)));
+                    sender.sendMessage(Utils.colorize(s.replace("{player}", p.getName()).replace("{vote_url}", Config.VOTE_URL)));
                 }
             } else {
                 sender.sendMessage(Messages.NO_PERMISSION);
