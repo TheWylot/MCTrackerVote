@@ -17,7 +17,7 @@ public class Vote {
     private int id;
 
     @DatabaseField(canBeNull = false)
-    private String username;
+    public String username;
 
     @DatabaseField(columnName = "voted_at", canBeNull = false)
     private int votedAt;
