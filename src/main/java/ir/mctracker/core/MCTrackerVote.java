@@ -14,19 +14,20 @@ import ir.mctracker.core.tasks.RedeemRewards;
 import ir.mctracker.core.utilities.Metrics;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
-public final class MCTrackerVote extends MegaPlugin {
+public final class MCTrackerVote extends JavaPlugin {
     @Getter @Setter private static Dao<Vote,String> votesDao;
 
     @Override
-    public void onPluginEnable() {
+    public void onEnable() {
         // Setup configuration files
-        getConfigManager().register(Storage.class);
-        getConfigManager().register(Config.class);
-        getConfigManager().register(Messages.class);
+        getServer().getServicesManager().getRegistration(Storage.class);
+        getServer().getServicesManager().getRegistration(Config.class);
+        getServer().getServicesManager().getRegistration(Messages.class);
 
         // Setting up datasource
         try {
@@ -35,35 +36,33 @@ public final class MCTrackerVote extends MegaPlugin {
             } else if (Storage.LOCATION.equalsIgnoreCase("mysql")) {
                 DataSource.MySQL();
             } else {
-                disablePlugin( "&cStorage type defined in config (" + Storage.LOCATION + ") is not valid!");
+                getLogger().severe( "&cStorage type defined in config (" + Storage.LOCATION + ") is not valid!");
+                getServer().getPluginManager().disablePlugin(this);
                 return;
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
-            disablePlugin( "&cPlugin could not work with database! [ Check Stack Trace For More Information ]");
+            getLogger().severe( "&cPlugin could not work with database! [ Check Stack Trace For More Information ]");
+            getServer().getPluginManager().disablePlugin(this);
             return;
         }
         catch (IOException exception) {
             exception.printStackTrace();
-            disablePlugin("&cPlugin is unable to create database file, Please check directory permissions [ Check Stack Trace For More Information ]");
+            getLogger().severe("&cPlugin is unable to create database file, Please check directory permissions [ Check Stack Trace For More Information ]");
+            getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
         // Register commands
-        register("tracker", new TrackerCommand());
-        register("vote", new VoteCommand());
+        this.getCommand("tracker").setExecutor(new TrackerCommand());
+        this.getCommand("vote").setExecutor(new VoteCommand());
 
         // Booting tasks
-        new FetchAPI().runTaskTimerAsynchronously(getInstance(), 0, Config.CYCLE);
-        new RedeemRewards().runTaskTimer(getInstance(), 0, Config.CYCLE / 2);
+        new FetchAPI().runTaskTimerAsynchronously(this, 0, Config.CYCLE);
+        new RedeemRewards().runTaskTimer(this, 0, Config.CYCLE / 2);
 
         // Setting up metrics
-        new Metrics(getInstance(), 12780);
-    }
-
-    @Override
-    public void onPluginDisable() {
-
+        new Metrics(this, 12780);
     }
 
 }
